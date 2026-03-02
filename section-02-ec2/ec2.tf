@@ -21,7 +21,7 @@ resource "aws_security_group" "ec2_sg" {
 
 # Free-tier eligible EC2 instance (t2.micro, 750 hrs/month for 12 months)
 resource "aws_instance" "free_tier" {
-  ami                    = data.aws_ami.amazon_linux_2023.id
+  ami                    = var.ami_id
   instance_type          = var.instance_type
   key_name               = aws_key_pair.ec2.key_name
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]

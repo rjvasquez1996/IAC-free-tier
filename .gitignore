@@ -1,0 +1,27 @@
+# vscode config
+.vscode/
+# Terraform state files (contain sensitive infrastructure data)
+*.tfstate
+*.tfstate.backup
+
+# Terraform working directory
+.terraform/
+.terraform.lock.hcl
+
+# Variable files with real values (use terraform.tfvars.example instead)
+terraform.tfvars
+*.auto.tfvars
+
+# Saved plan files (may contain sensitive values)
+*.tfplan
+
+# Override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Credentials and secrets
+.env
+*.pem
+*.key

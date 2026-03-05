@@ -4,11 +4,11 @@ resource "aws_security_group" "ec2_sg" {
   description = "Allow SSH inbound, all outbound"
 
   ingress {
-    description = "SSH"
-    from_port   = 22
-    to_port     = 22
+    description = "port "
+    from_port   = 5230
+    to_port     = 5230
     protocol    = "tcp"
-    cidr_blocks = [local.my_cidr]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -19,17 +19,27 @@ resource "aws_security_group" "ec2_sg" {
   }
 }
 
+resource "aws_security_group_rule" "ssh" {
+  type              = "ingress"
+  security_group_id = aws_security_group.ec2_sg.id
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  cidr_blocks       = [local.my_cidr]
+}
+
 # Free-tier eligible EC2 instance (t2.micro, 750 hrs/month for 12 months)
 resource "aws_instance" "free_tier" {
   ami                    = var.ami_id
   instance_type          = var.instance_type
   key_name               = aws_key_pair.ec2.key_name
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
+  user_data              = file("${path.module}/user_data.sh")
 
-  # 30 GB is the free-tier limit for EBS gp3 storage
+  # 30 GB is the free-tier limit for EBS gp2 storage
   root_block_device {
-    volume_size = 8
-    volume_type = "gp3"
+    volume_size = 30
+    volume_type = "gp2"
   }
 
   tags = {

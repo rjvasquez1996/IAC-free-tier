@@ -31,3 +31,18 @@ module "ec2" {
   instance_type = var.instance_type
   ami_id        = data.aws_ami.amazon_linux_2023.id
 }
+
+module "s3_website" {
+  count          = var.enabled_sections.section03 ? 1 : 0
+  source         = "./section-03-s3-cloudfront"
+  bucket_name    = var.s3_bucket_name
+  index_document = var.index_document
+  error_document = var.error_document
+}
+
+module "api_gateway" {
+  count           = var.enabled_sections.section04 ? 1 : 0
+  source          = "./section-04-api-gateway"
+  api_name        = var.api_name
+  allowed_origins = ["https://${module.s3_website[0].cloudfront_domain_name}"]
+}

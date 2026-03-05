@@ -3,7 +3,10 @@ budget_limit_usd = "1.0"
 alert_email      = "your-email@example.com"
 aws_region    = "us-west-2"
 instance_type = "t2.micro"
+s3_bucket_name = "my-static-website-bucket"
 enabled_sections = {
-    section01 = true
-    section02 = false
+  section01 = true
+  section02 = true
+  section03 = true
+  section04 = true
 }

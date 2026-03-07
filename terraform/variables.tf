@@ -57,5 +57,6 @@ variable "enabled_sections" {
     section02 = true
     section03 = true
     section04 = true
+    section05 = true
   }
 }

@@ -1,5 +1,5 @@
 resource "aws_iam_role" "lambda" {
-  name = "${var.api_name}-lambda-role"
+  name = "${var.api_name}-roulette-lambda-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -7,6 +7,25 @@ resource "aws_iam_role" "lambda" {
       Action    = "sts:AssumeRole"
       Effect    = "Allow"
       Principal = { Service = "lambda.amazonaws.com" }
+    }]
+  })
+}
+
+resource "aws_iam_role_policy" "lambda_dynamodb" {
+  name = "${var.api_name}-roulette-dynamodb"
+  role = aws_iam_role.lambda.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Action = [
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:Scan"
+      ]
+      Resource = aws_dynamodb_table.roulette_users.arn
     }]
   })
 }
@@ -26,15 +45,21 @@ data "archive_file" "lambda" {
   }
 }
 
-resource "aws_lambda_function" "api" {
-  function_name    = "${var.api_name}-handler"
+resource "aws_lambda_function" "roulette" {
+  function_name    = "${var.api_name}-roulette"
   role             = aws_iam_role.lambda.arn
   runtime          = "python3.12"
   handler          = "handler.lambda_handler"
   filename         = data.archive_file.lambda.output_path
   source_code_hash = data.archive_file.lambda.output_base64sha256
 
+  environment {
+    variables = {
+      TABLE_NAME = aws_dynamodb_table.roulette_users.name
+    }
+  }
+
   tags = {
-    Name = "${var.api_name}-handler"
+    Name = "${var.api_name}-roulette"
   }
 }

@@ -44,6 +44,8 @@ aws cloudformation deploy --template-file <template>.yaml --stack-name <stack-na
 | 01 — Budgets | Monthly cost budget with email alerts |
 | 02 — EC2 | Free-tier EC2 instance with SSH access |
 | 03 — S3 + CloudFront | Static website hosted on S3, served via CloudFront |
+| 04 — API Gateway | HTTP API Gateway with CORS (requires section 03) |
+| 05 — Roulette | Roulette/raffle app with DynamoDB + Lambda (requires sections 03 & 04) |
 
 ---
 
@@ -54,7 +56,9 @@ aws cloudformation deploy --template-file <template>.yaml --stack-name <stack-na
 ├── terraform/          # Terraform modules
 │   ├── section-01-budgets/
 │   ├── section-02-ec2/
-│   └── section-03-s3/
+│   ├── section-03-s3-cloudfront/
+│   ├── section-04-api-gateway/
+│   └── section-05-roulette/
 └── cloudformation/     # CloudFormation templates (coming soon)
     ├── section-01-budgets/
     └── section-02-ec2/

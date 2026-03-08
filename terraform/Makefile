@@ -11,14 +11,13 @@ setup-backend:
 	fi
 	terraform init -reconfigure
 
-add-my-ip:
+$(WHITELIST_FILE):
+	@[ ! -f $@ ] && echo 'ssh_whitelist = []' > $@ || true
+
+add-my-ip: $(WHITELIST_FILE)
 	@MY_IP=$$(curl -s https://checkip.amazonaws.com | tr -d '[:space:]'); \
 	MY_CIDR="$$MY_IP/32"; \
-	if [ -f $(WHITELIST_FILE) ]; then \
-		EXISTING=$$(grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/[0-9]+' $(WHITELIST_FILE) | tr '\n' ' '); \
-	else \
-		EXISTING=""; \
-	fi; \
+	EXISTING=$$(grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/[0-9]+' $(WHITELIST_FILE) | tr '\n' ' '); \
 	if echo " $$EXISTING " | grep -qF " $$MY_CIDR "; then \
 		echo "Your IP $$MY_CIDR is already in the whitelist."; \
 	else \

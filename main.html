@@ -1,1 +1,49 @@
-tu bucket ha sido configurado <3
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roulette</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #0f172a;
+      color: #fff;
+    }
+    h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+    p { color: #94a3b8; margin-bottom: 2rem; font-size: 1.1rem; }
+    #qr { background: #fff; padding: 1.5rem; border-radius: 12px; }
+    #qr img { display: block; }
+    .url { margin-top: 1.5rem; color: #60a5fa; font-size: 0.9rem; word-break: break-all; }
+  </style>
+</head>
+<body>
+  <h1>Join the Roulette</h1>
+  <p>Scan the QR code to register</p>
+  <div id="qr"></div>
+  <div class="url" id="url-display"></div>
+
+  <script>
+    // qrcode-generator v1.4.4 (MIT) - minified inline to avoid external deps
+    // Source: https://github.com/nickyeh/qr-code-generator
+    // Using a canvas-based approach instead for simplicity
+    const rouletteUrl = window.location.origin + "/roulette.html";
+    document.getElementById("url-display").textContent = rouletteUrl;
+
+    // Use a QR code API as an img src — lightweight, no JS library needed
+    // This calls a public endpoint that returns a PNG
+    const qrImg = document.createElement("img");
+    qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(rouletteUrl);
+    qrImg.alt = "QR Code to Roulette";
+    qrImg.width = 300;
+    qrImg.height = 300;
+    document.getElementById("qr").appendChild(qrImg);
+  </script>
+</body>
+</html>

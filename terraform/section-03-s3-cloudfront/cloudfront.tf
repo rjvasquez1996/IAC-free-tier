@@ -6,7 +6,7 @@ action "aws_cloudfront_create_invalidation" "main_html" {
 }
 
 resource "terraform_data" "invalidate_on_main_html_change" {
-  input = aws_s3_object.initial_main.content_base64sha256
+  input = filesha256("${path.module}/main.html")
 
   lifecycle {
     action_trigger {

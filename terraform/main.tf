@@ -40,6 +40,7 @@ module "s3_website" {
   bucket_name    = var.s3_bucket_name
   index_document = var.index_document
   error_document = var.error_document
+  app_address    = var.enabled_sections.section02 ? "http://${module.ec2[0].public_ip}:5230" : ""
 }
 
 module "api_gateway" {

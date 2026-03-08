@@ -84,12 +84,14 @@ resource "aws_ecs_task_definition" "memos" {
 }
 
 resource "aws_ecs_service" "memos" {
-  count           = var.run_on_ecs ? 1 : 0
-  name            = "memos"
-  cluster         = aws_ecs_cluster.main[0].id
-  task_definition = aws_ecs_task_definition.memos[0].arn
-  desired_count   = 1
-  launch_type     = "EC2"
+  count                              = var.run_on_ecs ? 1 : 0
+  name                               = "memos"
+  cluster                            = aws_ecs_cluster.main[0].id
+  task_definition                    = aws_ecs_task_definition.memos[0].arn
+  desired_count                      = 1
+  launch_type                        = "EC2"
+  deployment_minimum_healthy_percent = 0
+  deployment_maximum_percent         = 101
 
   depends_on = [aws_instance.ecs_container_instance]
 }

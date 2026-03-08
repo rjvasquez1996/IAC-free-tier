@@ -1,6 +1,6 @@
 # Section 04 — API Gateway
 
-Deploys an **HTTP API Gateway** with CORS configured to allow requests from the CloudFront domain created in section 03. Other sections (e.g. section 05) attach their own routes and integrations to this gateway.
+Deploys an **HTTP API Gateway** with CORS configured to allow requests from the CloudFront domain created in section 03.
 
 ## Architecture
 

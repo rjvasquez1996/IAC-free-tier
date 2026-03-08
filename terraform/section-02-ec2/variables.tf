@@ -13,3 +13,9 @@ variable "ssh_whitelist" {
   type        = list(string)
   default     = []
 }
+
+variable "run_on_ecs" {
+  description = "If true, runs the application on an ECS cluster (EC2 launch type). If false, runs directly on a standalone EC2 instance with Docker. Only one mode is active at a time."
+  type        = bool
+  default     = false
+}

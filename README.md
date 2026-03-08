@@ -59,6 +59,13 @@ aws cloudformation deploy --template-file <template>.yaml --stack-name <stack-na
 │   ├── section-03-s3-cloudfront/
 │   ├── section-04-api-gateway/
 │   └── section-05-roulette/
+module
+│   ├── providers.tf
+│   ├── s3.tf
+│   ├── cloudfront.tf
+│   ├── variables.tf
+│   └── outputs.tf
+Lambda module
 └── cloudformation/     # CloudFormation templates (coming soon)
     ├── section-01-budgets/
     └── section-02-ec2/

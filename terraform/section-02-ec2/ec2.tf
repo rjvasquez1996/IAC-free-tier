@@ -29,7 +29,9 @@ resource "aws_security_group_rule" "ssh" {
 }
 
 # Free-tier eligible EC2 instance (t2.micro, 750 hrs/month for 12 months)
+# Only created when run_on_ecs = false
 resource "aws_instance" "free_tier" {
+  count                  = var.run_on_ecs ? 0 : 1
   ami                    = var.ami_id
   instance_type          = var.instance_type
   key_name               = aws_key_pair.ec2.key_name

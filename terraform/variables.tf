@@ -21,6 +21,12 @@ variable "instance_type" {
   default     = "t2.micro"
 }
 
+variable "run_on_ecs" {
+  description = "If true, runs the application on an ECS cluster (EC2 launch type). If false, runs on a standalone EC2 instance with Docker."
+  type        = bool
+  default     = false
+}
+
 variable "s3_bucket_name" {
   description = "Globally unique name for the S3 static website bucket"
   type        = string

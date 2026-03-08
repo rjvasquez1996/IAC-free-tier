@@ -38,10 +38,17 @@ Set a section to `true` to deploy it, or `false` to skip it:
 ```hcl
 enabled_sections = {
   section01 = true   # Budgets
-  section02 = false  # EC2
+  section02 = false  # EC2 / ECS
   section03 = false  # S3 + CloudFront static website
   section04 = false  # API Gateway + Lambda (requires section03)
 }
+```
+
+For section 02, choose the deployment mode with `run_on_ecs`:
+
+```hcl
+run_on_ecs = false  # standalone EC2 with Docker (default)
+run_on_ecs = true   # ECS cluster on EC2
 ```
 
 ---
@@ -51,7 +58,7 @@ enabled_sections = {
 | Section | Module | Description |
 |---|---|---|
 | 01 | [section-01-budgets](./section-01-budgets/README.md) | Monthly cost budget with email alerts |
-| 02 | [section-02-ec2](./section-02-ec2/README.md) | Free-tier EC2 instance with SSH access |
+| 02 | [section-02-ec2](./section-02-ec2/README.md) | Free-tier EC2 running Memos — standalone Docker or ECS on EC2 (`run_on_ecs`) |
 | 03 | [section-03-s3-cloudfront](./section-03-s3-cloudfront/README.md) | Static website on S3 + CloudFront |
 | 04 | [section-04-api-gateway](./section-04-api-gateway/README.md) | HTTP API Gateway + Lambda — CORS origin sourced from section 03 |
 
@@ -71,11 +78,13 @@ enabled_sections = {
 │   ├── budgets.tf
 │   ├── variables.tf
 │   └── outputs.tf
-├── section-02-ec2/                # EC2 module
+├── section-02-ec2/                # EC2 / ECS module
 │   ├── providers.tf
-│   ├── ec2.tf
+│   ├── ec2.tf                     # Standalone EC2 instance (run_on_ecs = false)
+│   ├── ecs.tf                     # ECS cluster + container instance (run_on_ecs = true)
 │   ├── ip_getter.tf
 │   ├── key.tf
+│   ├── user_data.sh               # Docker bootstrap for standalone mode
 │   ├── variables.tf
 │   └── outputs.tf
 ├── section-03-s3-cloudfront/      # S3 + CloudFront module

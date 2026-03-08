@@ -42,9 +42,9 @@ aws cloudformation deploy --template-file <template>.yaml --stack-name <stack-na
 | Section | Description |
 |---|---|
 | 01 — Budgets | Monthly cost budget with email alerts |
-| 02 — EC2 | Free-tier EC2 instance with SSH access |
+| 02 — EC2 / ECS | Free-tier EC2 running Memos — standalone Docker or ECS on EC2 (controlled by `run_on_ecs`) |
 | 03 — S3 + CloudFront | Static website hosted on S3, served via CloudFront |
-| 04 | [section-04-api-gateway](./section-04-api-gateway/README.md) | HTTP API Gateway + Lambda — CORS origin sourced from section 03 |
+| 04 — API Gateway | HTTP API Gateway + Lambda — CORS origin sourced from section 03 |
 
 ---
 

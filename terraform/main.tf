@@ -30,6 +30,7 @@ module "ec2" {
   source        = "./section-02-ec2"
   instance_type = var.instance_type
   ami_id        = data.aws_ami.amazon_linux_2023.id
+  ssh_whitelist = var.ssh_whitelist
 }
 
 module "s3_website" {
@@ -45,4 +46,13 @@ module "api_gateway" {
   source          = "./section-04-api-gateway"
   api_name        = var.api_name
   allowed_origins = ["https://${module.s3_website[0].cloudfront_domain_name}"]
+}
+
+module "roulette" {
+  count             = var.enabled_sections.section05 ? 1 : 0
+  source            = "./section-05-roulette"
+  api_name          = var.api_name
+  api_id            = module.api_gateway[0].api_id
+  api_execution_arn = module.api_gateway[0].api_execution_arn
+  s3_bucket_name    = module.s3_website[0].bucket_name
 }

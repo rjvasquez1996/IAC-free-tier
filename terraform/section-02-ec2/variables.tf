@@ -7,3 +7,9 @@ variable "ami_id" {
   description = "id of the EC2 ami"
   type        = string
 }
+
+variable "ssh_whitelist" {
+  description = "Static list of CIDRs allowed SSH access. If empty, the current public IP is used automatically."
+  type        = list(string)
+  default     = []
+}

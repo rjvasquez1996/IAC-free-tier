@@ -21,6 +21,12 @@ variable "instance_type" {
   default     = "t2.micro"
 }
 
+variable "ssh_whitelist" {
+  description = "Static list of CIDRs allowed SSH access to the EC2 instance. If empty, the current public IP is used."
+  type        = list(string)
+  default     = []
+}
+
 variable "s3_bucket_name" {
   description = "Globally unique name for the S3 static website bucket"
   type        = string
@@ -57,5 +63,6 @@ variable "enabled_sections" {
     section02 = true
     section03 = true
     section04 = true
+    section05 = true
   }
 }

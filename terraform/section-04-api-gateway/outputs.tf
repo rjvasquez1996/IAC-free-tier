@@ -3,7 +3,12 @@ output "api_endpoint" {
   value       = aws_apigatewayv2_stage.default.invoke_url
 }
 
-output "lambda_function_name" {
-  description = "Name of the placeholder Lambda function"
-  value       = aws_lambda_function.api.function_name
+output "api_id" {
+  description = "ID of the HTTP API Gateway"
+  value       = aws_apigatewayv2_api.this.id
+}
+
+output "api_execution_arn" {
+  description = "Execution ARN of the HTTP API Gateway"
+  value       = aws_apigatewayv2_api.this.execution_arn
 }

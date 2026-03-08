@@ -21,6 +21,12 @@ variable "instance_type" {
   default     = "t2.micro"
 }
 
+variable "ssh_whitelist" {
+  description = "Static list of CIDRs allowed SSH access to the EC2 instance. If empty, the current public IP is used."
+  type        = list(string)
+  default     = []
+}
+
 variable "run_on_ecs" {
   description = "If true, runs the application on an ECS cluster (EC2 launch type). If false, runs on a standalone EC2 instance with Docker."
   type        = bool
@@ -63,5 +69,6 @@ variable "enabled_sections" {
     section02 = true
     section03 = true
     section04 = true
+    section05 = true
   }
 }

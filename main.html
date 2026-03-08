@@ -1,1 +1,74 @@
-tu bucket ha sido configurado <3
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AWS Student Community Day</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #131a2e;
+      color: #fff;
+      padding: 2rem 1rem;
+    }
+    .hero h1 { font-size: 3rem; font-weight: 800; line-height: 1.1; text-align: center; margin-bottom: 2.5rem; }
+    .hero h1 .white { color: #fff; }
+    .hero h1 .orange { background: linear-gradient(135deg, #f59e0b, #f97316, #fb923c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .qr-grid { display: flex; gap: 8rem; flex-wrap: wrap; justify-content: center; }
+    .qr-card { text-align: center; }
+    .qr-card h2 { font-size: 1.2rem; color: #f97316; margin-bottom: 0.5rem; }
+    .qr-card p { color: #94a3b8; font-size: 0.85rem; margin-bottom: 1rem; }
+    .qr-box { background: #fff; padding: 1.2rem; border-radius: 12px; display: inline-block; }
+    .qr-box img { display: block; }
+    .url { margin-top: 0.75rem; color: #475569; font-size: 0.75rem; word-break: break-all; max-width: 400px; }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <h1><span class="white">AWS Student</span><br><span class="orange">Community Day</span></h1>
+  </div>
+
+  <div class="qr-grid">
+    <div class="qr-card">
+      <h2>Roulette</h2>
+      <p>Register for a chance to win!</p>
+      <div class="qr-box" id="qr-roulette"></div>
+      <div class="url" id="url-roulette"></div>
+    </div>
+
+    <div class="qr-card" id="card-app" style="display:none">
+      <h2>Memos App</h2>
+      <p>Try the app running on EC2</p>
+      <div class="qr-box" id="qr-app"></div>
+      <div class="url" id="url-app"></div>
+    </div>
+  </div>
+
+  <script>
+    function makeQR(containerId, urlDisplayId, url) {
+      document.getElementById(urlDisplayId).textContent = url;
+      var img = document.createElement("img");
+      img.src = "https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=" + encodeURIComponent(url);
+      img.alt = "QR Code";
+      img.width = 400;
+      img.height = 400;
+      document.getElementById(containerId).appendChild(img);
+    }
+
+    var rouletteUrl = window.location.origin + "/roulette.html";
+    makeQR("qr-roulette", "url-roulette", rouletteUrl);
+
+    var appAddress = "${app_address}";
+    if (appAddress) {
+      document.getElementById("card-app").style.display = "";
+      makeQR("qr-app", "url-app", appAddress);
+    }
+  </script>
+</body>
+</html>

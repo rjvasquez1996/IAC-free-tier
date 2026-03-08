@@ -1,0 +1,76 @@
+name: Terraform Plan
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/terraform-*.yml'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: us-east-1
+
+jobs:
+  plan:
+    name: Terraform Plan
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        id: plan
+        run: |
+          terraform plan -no-color \
+            -var="aws_region=${{ vars.TF_VAR_AWS_REGION }}" \
+            -var="alert_email=${{ secrets.TF_VAR_ALERT_EMAIL }}" \
+            -var="s3_bucket_name=${{ vars.TF_VAR_S3_BUCKET_NAME }}" \
+            -var="api_name=${{ vars.TF_VAR_API_NAME }}" \
+            -var="budget_limit_usd=${{ vars.TF_VAR_BUDGET_LIMIT_USD }}" \
+            -var="instance_type=${{ vars.TF_VAR_INSTANCE_TYPE }}" \
+            -var="run_on_ecs=${{ vars.TF_VAR_RUN_ON_ECS }}" \
+            -out=tfplan 2>&1 | tee plan_output.txt
+        continue-on-error: true
+
+      - name: Comment Plan on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const plan = fs.readFileSync('terraform/plan_output.txt', 'utf8');
+            const truncated = plan.length > 60000 ? plan.substring(0, 60000) + '\n\n... (truncated)' : plan;
+            const body = `### Terraform Plan
+            \`\`\`
+            ${truncated}
+            \`\`\`
+            *Status: \`${{ steps.plan.outcome }}\`*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+      - name: Fail if plan failed
+        if: steps.plan.outcome == 'failure'
+        run: exit 1

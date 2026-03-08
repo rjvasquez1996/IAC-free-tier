@@ -5,7 +5,7 @@ Each section is a Terraform module that can be toggled on or off via the `enable
 
 ## Prerequisites
 
-- [Terraform](https://developer.hashicorp.com/terraform/install) >= 1.5.0
+- [Terraform](https://developer.hashicorp.com/terraform/install) >= 1.14.6
 - AWS credentials configured locally (`aws configure` or environment variables)
 - An AWS account (free tier eligible for the first 12 months)
 
@@ -40,7 +40,8 @@ enabled_sections = {
   section01 = true   # Budgets
   section02 = false  # EC2 / ECS
   section03 = false  # S3 + CloudFront static website
-  section04 = false  # API Gateway + Lambda (requires section03)
+  section04 = false  # API Gateway (requires section03)
+  section05 = false  # Roulette app — DynamoDB + Lambda (requires section03 & section04)
 }
 ```
 
@@ -60,7 +61,8 @@ run_on_ecs = true   # ECS cluster on EC2
 | 01 | [section-01-budgets](./section-01-budgets/README.md) | Monthly cost budget with email alerts |
 | 02 | [section-02-ec2](./section-02-ec2/README.md) | Free-tier EC2 running Memos — standalone Docker or ECS on EC2 (`run_on_ecs`) |
 | 03 | [section-03-s3-cloudfront](./section-03-s3-cloudfront/README.md) | Static website on S3 + CloudFront |
-| 04 | [section-04-api-gateway](./section-04-api-gateway/README.md) | HTTP API Gateway + Lambda — CORS origin sourced from section 03 |
+| 04 | [section-04-api-gateway](./section-04-api-gateway/README.md) | HTTP API Gateway — CORS origin sourced from section 03 |
+| 05 | [section-05-roulette](./section-05-roulette/README.md) | Roulette/raffle app — DynamoDB, Lambda, routes on section 04's APIGW, frontend on section 03's S3 |
 
 ---
 
@@ -93,11 +95,19 @@ run_on_ecs = true   # ECS cluster on EC2
 │   ├── cloudfront.tf
 │   ├── variables.tf
 │   └── outputs.tf
-└── section-04-api-gateway/        # API Gateway + Lambda module
+├── section-04-api-gateway/        # API Gateway module
+│   ├── providers.tf
+│   ├── api_gateway.tf
+│   ├── variables.tf
+│   └── outputs.tf
+└── section-05-roulette/           # Roulette app module
     ├── providers.tf
-    ├── api_gateway.tf
+    ├── dynamodb.tf
     ├── lambda.tf
     ├── handler.py
+    ├── api_gateway.tf
+    ├── frontend.tf
+    ├── roulette.html
     ├── variables.tf
     └── outputs.tf
 ```

@@ -1,8 +1,10 @@
-# Fetch the current public IPv4 address of the machine running Terraform
+# Fetch the current public IPv4 address of the machine running Terraform.
+# Always fetched, but only used when ssh_whitelist is empty.
 data "http" "my_ip" {
   url = "https://checkip.amazonaws.com"
 }
 
 locals {
-  my_cidr = "${chomp(data.http.my_ip.response_body)}/32"
+  fetched_cidr = "${chomp(data.http.my_ip.response_body)}/32"
+  ssh_cidrs    = length(var.ssh_whitelist) > 0 ? var.ssh_whitelist : [local.fetched_cidr]
 }

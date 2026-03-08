@@ -14,3 +14,9 @@ variable "error_document" {
   type        = string
   default     = "error.html"
 }
+
+variable "app_address" {
+  description = "URL of the app running on EC2 (e.g. http://IP:5230). Displayed as a QR code on the landing page."
+  type        = string
+  default     = ""
+}

@@ -1,3 +1,21 @@
+action "aws_cloudfront_create_invalidation" "main_html" {
+  config {
+    distribution_id = aws_cloudfront_distribution.website.id
+    paths           = ["/${var.index_document}"]
+  }
+}
+
+resource "terraform_data" "invalidate_on_main_html_change" {
+  input = aws_s3_object.initial_main.etag
+
+  lifecycle {
+    action_trigger {
+      events  = [before_update]
+      actions = [action.aws_cloudfront_create_invalidation.main_html]
+    }
+  }
+}
+
 # Origin Access Control — modern replacement for OAI
 resource "aws_cloudfront_origin_access_control" "website" {
   name                              = "${var.bucket_name}-oac"

@@ -19,6 +19,16 @@ output "cloudfront_distribution_id" {
 }
 
 output "api_endpoint" {
-  description = "HTTP API Gateway base URL (call /hello to test)"
+  description = "HTTP API Gateway base URL"
   value       = var.enabled_sections.section04 ? module.api_gateway[0].api_endpoint : null
+}
+
+output "roulette_table" {
+  description = "DynamoDB table name for the roulette app"
+  value       = var.enabled_sections.section05 ? module.roulette[0].dynamodb_table_name : null
+}
+
+output "roulette_lambda" {
+  description = "Lambda function name for the roulette app"
+  value       = var.enabled_sections.section05 ? module.roulette[0].lambda_function_name : null
 }

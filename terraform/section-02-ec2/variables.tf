@@ -8,6 +8,12 @@ variable "ami_id" {
   type        = string
 }
 
+variable "ssh_whitelist" {
+  description = "Static list of CIDRs allowed SSH access. If empty, the current public IP is used automatically."
+  type        = list(string)
+  default     = []
+}
+
 variable "run_on_ecs" {
   description = "If true, runs the application on an ECS cluster (EC2 launch type). If false, runs directly on a standalone EC2 instance with Docker. Only one mode is active at a time."
   type        = bool

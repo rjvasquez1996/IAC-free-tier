@@ -11,6 +11,7 @@ resource "aws_s3_object" "initial_main" {
   key          = var.index_document
   source       = "${path.module}/main.html"
   content_type = "text/html"
+  etag         = filemd5("${path.module}/main.html")
 }
 resource "aws_s3_object" "initial_error" {
   bucket       = aws_s3_bucket.website.id

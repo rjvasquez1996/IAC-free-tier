@@ -34,7 +34,6 @@ resource "aws_instance" "free_tier" {
   count                  = var.run_on_ecs ? 0 : 1
   ami                    = var.ami_id
   instance_type          = var.instance_type
-  key_name               = aws_key_pair.ec2.key_name
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
   user_data              = file("${path.module}/user_data.sh")
 

@@ -1,0 +1,36 @@
+# =============================================================================
+# Remote Backend Configuration (S3 with native state locking)
+# =============================================================================
+#
+# SETUP TUTORIAL
+# --------------
+# 1. Copy this file:
+#      cp backend.tf.example backend.tf
+#
+# 2. Create the S3 bucket for state storage:
+#      aws s3api create-bucket \
+#        --bucket <your-bucket-name> \
+#        --region <your-region>
+#
+#    Enable versioning (recommended):
+#      aws s3api put-bucket-versioning \
+#        --bucket <your-bucket-name> \
+#        --versioning-configuration Status=Enabled
+#
+# 3. Fill in the values below and run:
+#      make setup-backend
+#
+# Note: `use_lockfile = true` uses S3's native conditional writes for state
+# locking (requires Terraform >= 1.10). No DynamoDB table needed.
+#
+# =============================================================================
+
+terraform {
+  backend "s3" {
+    bucket       = "<your-bucket-name>"
+    key          = "iac-scds/terraform.tfstate"
+    region       = "<your-region>"
+    encrypt      = true
+    use_lockfile = true
+  }
+}

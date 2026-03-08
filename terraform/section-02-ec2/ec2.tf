@@ -25,7 +25,7 @@ resource "aws_security_group_rule" "ssh" {
   from_port         = 22
   to_port           = 22
   protocol          = "tcp"
-  cidr_blocks       = [local.my_cidr]
+  cidr_blocks       = local.ssh_cidrs
 }
 
 # Free-tier eligible EC2 instance (t2.micro, 750 hrs/month for 12 months)

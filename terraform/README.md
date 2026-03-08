@@ -5,7 +5,7 @@ Each section is a Terraform module that can be toggled on or off via the `enable
 
 ## Prerequisites
 
-- [Terraform](https://developer.hashicorp.com/terraform/install) >= 1.5.0
+- [Terraform](https://developer.hashicorp.com/terraform/install) >= 1.14.6
 - AWS credentials configured locally (`aws configure` or environment variables)
 - An AWS account (free tier eligible for the first 12 months)
 

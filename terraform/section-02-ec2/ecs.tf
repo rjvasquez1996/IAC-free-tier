@@ -37,7 +37,6 @@ resource "aws_instance" "ecs_container_instance" {
   count                  = var.run_on_ecs ? 1 : 0
   ami                    = var.ami_id
   instance_type          = var.instance_type
-  key_name               = aws_key_pair.ec2.key_name
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
   iam_instance_profile   = aws_iam_instance_profile.ecs_instance[0].name
 

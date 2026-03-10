@@ -73,8 +73,16 @@ Lambda module
 
 ---
 
+## AWS Free Tier
+
+All sections in this project are designed to stay within AWS free tier limits.
+See [free_offers.md](./free_offers.md) for a complete reference of free tier limits by service
+(12-month free, always free, and free trials), including notes on the July 2025 free tier changes.
+
+---
+
 ## Prerequisites
 
-- An AWS account (free tier eligible for the first 12 months)
+- An AWS account (free tier eligible — see [free_offers.md](./free_offers.md))
 - AWS credentials configured locally (`aws configure` or environment variables)
 - The CLI tool for your chosen approach (Terraform or AWS CLI)

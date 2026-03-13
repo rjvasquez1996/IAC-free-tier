@@ -199,6 +199,8 @@
         }
         document.getElementById("winner-container").innerHTML = "";
         input.value = "";
+        localStorage.setItem("registered", "1");
+        disableRegistration();
         fetchUsers();
       } catch {
         showError("Could not connect to the API");
@@ -260,6 +262,16 @@
       setTimeout(() => container.remove(), 2000);
     }
 
+    function disableRegistration() {
+      var input = document.getElementById("name-input");
+      var btn = document.querySelector(".btn-add");
+      input.disabled = true;
+      input.placeholder = "You are already registered!";
+      btn.disabled = true;
+      btn.style.opacity = "0.5";
+      btn.style.cursor = "not-allowed";
+    }
+
     function esc(s) {
       const d = document.createElement("div");
       d.textContent = s;
@@ -270,9 +282,24 @@
       adminMode = !adminMode;
       document.getElementById("pick-btn").classList.toggle("visible", adminMode);
       document.querySelector(".admin-only").style.display = adminMode ? "" : "none";
-      if (!adminMode && document.getElementById("tab-admin").classList.contains("active")) {
-        switchTab("roulette");
+      if (adminMode) {
+        enableRegistration();
+      } else {
+        if (localStorage.getItem("registered")) disableRegistration();
+        if (document.getElementById("tab-admin").classList.contains("active")) {
+          switchTab("roulette");
+        }
       }
+    }
+
+    function enableRegistration() {
+      var input = document.getElementById("name-input");
+      var btn = document.querySelector(".btn-add");
+      input.disabled = false;
+      input.placeholder = "Enter a name...";
+      btn.disabled = false;
+      btn.style.opacity = "";
+      btn.style.cursor = "";
     }
 
     document.addEventListener("keydown", e => {
@@ -286,6 +313,7 @@
       if (e.key === "Enter") addUser();
     });
 
+    if (localStorage.getItem("registered")) disableRegistration();
     fetchUsers();
   </script>
 </body>

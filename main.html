@@ -52,7 +52,12 @@
 
   <script>
     function makeQR(containerId, urlDisplayId, url) {
-      document.getElementById(urlDisplayId).textContent = url;
+      var a = document.createElement("a");
+      a.href = url;
+      a.textContent = url;
+      a.target = "_blank";
+      a.style.color = "inherit";
+      document.getElementById(urlDisplayId).appendChild(a);
       var img = document.createElement("img");
       img.src = "https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=" + encodeURIComponent(url);
       img.alt = "QR Code";

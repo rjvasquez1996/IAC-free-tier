@@ -245,7 +245,36 @@
       }
     }
 
+    function playCrowdCheer() {
+      var ctx = new (window.AudioContext || window.webkitAudioContext)();
+      var duration = 3;
+      var sampleRate = ctx.sampleRate;
+      var buffer = ctx.createBuffer(2, sampleRate * duration, sampleRate);
+      for (var ch = 0; ch < 2; ch++) {
+        var data = buffer.getChannelData(ch);
+        for (var i = 0; i < data.length; i++) {
+          var t = i / sampleRate;
+          var envelope = Math.min(t / 0.3, 1) * Math.max(0, 1 - (t - 1.5) / 1.5);
+          data[i] = (Math.random() * 2 - 1) * envelope * 0.4;
+        }
+      }
+      var source = ctx.createBufferSource();
+      source.buffer = buffer;
+      var bandpass = ctx.createBiquadFilter();
+      bandpass.type = "bandpass";
+      bandpass.frequency.value = 800;
+      bandpass.Q.value = 0.5;
+      var gain = ctx.createGain();
+      gain.gain.value = 0.6;
+      source.connect(bandpass);
+      bandpass.connect(gain);
+      gain.connect(ctx.destination);
+      source.start();
+      source.onended = function() { ctx.close(); };
+    }
+
     function announceWinner(name) {
+      playCrowdCheer();
       var utterance = new SpeechSynthesisUtterance("And the winner is... " + name + "!");
       utterance.rate = 0.9;
       utterance.pitch = 1.1;

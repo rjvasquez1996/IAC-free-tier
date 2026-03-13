@@ -199,8 +199,10 @@
         }
         document.getElementById("winner-container").innerHTML = "";
         input.value = "";
-        localStorage.setItem("registered", "1");
-        disableRegistration();
+        if (!adminMode) {
+          localStorage.setItem("registered", "1");
+          disableRegistration();
+        }
         fetchUsers();
       } catch {
         showError("Could not connect to the API");

@@ -234,6 +234,7 @@
             showError(data.error);
           } else {
             container.innerHTML = '<div class="winner-box"><h2>Winner: ' + esc(data.winner.name) + '</h2></div>';
+            announceWinner(data.winner.name);
             launchConfetti();
           }
           fetchUsers();
@@ -242,6 +243,14 @@
         btn.parentElement.classList.remove("picking");
         showError("Could not connect to the API");
       }
+    }
+
+    function announceWinner(name) {
+      var utterance = new SpeechSynthesisUtterance("And the winner is... " + name + "!");
+      utterance.rate = 0.9;
+      utterance.pitch = 1.1;
+      utterance.volume = 1;
+      speechSynthesis.speak(utterance);
     }
 
     function launchConfetti() {
